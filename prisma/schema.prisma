@@ -23,6 +23,8 @@ model User {
   username        String?
   displayUsername String?
 
+  lastLoginMethod String?
+
   @@map("user")
   @@unique([username])
 }

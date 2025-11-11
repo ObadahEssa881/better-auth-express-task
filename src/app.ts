@@ -5,12 +5,14 @@ import helmet from "helmet";
 import dotenv from "dotenv";
 import { fromNodeHeaders, toNodeHandler } from "better-auth/node";
 import { auth } from "./utils/auth";
+import cookieParser from "cookie-parser";
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 4000;
 
+app.use(cookieParser());
 app.all("/api/auth/*splat", toNodeHandler(auth));
 
 app.use(
@@ -28,7 +30,20 @@ app.get("/api/me", async (req, res) => {
   const session = await auth.api.getSession({
     headers: fromNodeHeaders(req.headers),
   });
-  return res.json(session);
+
+  return res.status(200).json({
+    session: session,
+  });
+});
+
+app.get("/api/mee", async (req, res) => {
+  const session = await auth.api.getSession({
+    headers: fromNodeHeaders(req.headers),
+  });
+
+  return res.status(200).json({
+    session: session,
+  });
 });
 
 app.listen(PORT, () => {
